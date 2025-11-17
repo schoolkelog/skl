@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skl Search Portal</title>
+    <!-- Favicon link using the raw GitHub URL -->
+    <link rel="icon" href="https://raw.githubusercontent.com/schoolkelog/skl/main/skl-removebg-preview.png">
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a slight shadow and centering on the rainbow text */
+        .rainbow-text {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-top: -1.5rem; /* Pull it closer to the main logo */
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .google-like-input {
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+        .google-like-input:focus {
+            outline: none;
+            box-shadow: 0 1px 6px rgba(32,33,36,.28);
+            border-color: transparent;
+        }
+        
+        /* Ensure cursor matches the Google look */
+        input[type="text"] {
+            caret-color: #4285f4;
+        }
+        
+        /* Modal Animation */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+
+        // --- Core Member Data with Added Flair ---
+        const memberData = {
+            "shreeman iyer": {
+                name: "Shreeman Iyer",
+                role: "The visionary **Co-owner** and Master Architect, the original **Creator of SklGPT**."
+            },
+            "yatharth chauhan": {
+                name: "Yatharth Chauhan",
+                role: "The foundational **Co-owner** and Grand Designer, the legendary **Creator of SKL**."
+            },
+            "veer srivastav": {
+                name: "Veer Srivastav",
+                role: "The esteemed **Founding Father**, whose initial brilliance ignited the Skl community."
+            },
+            "shreyan arora": {
+                name: "Shreyan Arora",
+                role: "The Code Wizard who plays a **Key Role in Developing SklGPT**, ensuring seamless digital magic."
+            },
+            "aarush bhardwaj": {
+                name: "Aarush Bhardwaj",
+                role: "The newest **New Member**, bringing fresh, dynamic energy and brilliant ideas to the team."
+            }
+        };
+
+        // --- Modal Content Data with Flair ---
+        const modalContent = {
+            "About": {
+                title: "About Skl: The Legend",
+                body: "Skl is not just a group; it’s a digital mythos. Founded on the principles of audacity and excessive coding, we are the collective force behind legendary projects like SklGPT. We exist where the compiler meets chaos, driving innovation powered by sheer community spirit and too much caffeine. Welcome to the history of tomorrow."
+            },
+            "Privacy": {
+                title: "Our Ultra-Secret Privacy Policy",
+                body: "We take your privacy incredibly seriously. So seriously, in fact, we don't track anything... except perhaps the cumulative awesome score of our members. Your data (name, role) is sacred and only used to determine who gets bragging rights this week. **Rule 1: No peeking.** (We might log search attempts just to check for high-tier fan club activity, but that's standard, right?)"
+            },
+            "Terms": {
+                title: "The Sacred Terms of Engagement",
+                body: "By continuing to use the Skl Search Portal, you agree to the following unnegotiable commandments:<ol class='list-decimal list-inside mt-4 space-y-2'><li>Thou shalt be cool.</li><li>Thou shalt not steal the secret snack stash.</li><li>Thou shalt respect the vibe (It's a coding vibe).</li><li>Thou shalt only use SklGPT for good (mostly).</li><li>Thou shalt acknowledge the Founding Fathers in all grand successes.</li></ol>Breach these terms and face a strongly-worded email."
+            },
+            "Settings": {
+                title: "Your Perfect Settings (Do Not Touch)",
+                body: "Warning: All settings are optimally calibrated for maximum performance and minimum drama. The 'Awesomeness' level is currently set to 'Maximum.' Any attempts to change this may result in a paradox. **Status: You are currently running on the ideal configuration.**"
+            }
+        };
+
+        // Function to perform the search and update the results display
+        const performSearch = () => {
+            const searchInput = document.getElementById('searchInput');
+            const resultsDiv = document.getElementById('searchResults');
+            const query = searchInput.value.trim().toLowerCase(); 
+            
+            // Clear previous results and styling
+            resultsDiv.innerHTML = '';
+            resultsDiv.className = 'w-full transition-all duration-300'; // Reset classes
+
+            if (query.length > 0) {
+                // Find member by checking if the query is included in the name (case-insensitive)
+                const memberKey = Object.keys(memberData).find(key => key.includes(query));
+
+                if (memberKey) {
+                    const member = memberData[memberKey];
+                    
+                    // Display the found result with success styling
+                    resultsDiv.classList.add('p-4', 'mt-4', 'bg-white', 'rounded-xl', 'shadow-2xl', 'border', 'border-blue-400', 'text-gray-800', 'animate-pulse-once');
+                    resultsDiv.innerHTML = `
+                        <p class="font-bold text-xl text-blue-700">${member.name}</p>
+                        <p class="mt-2 text-base">${member.role}</p>
+                    `;
+                } else {
+                    // Display "No results" message with neutral styling
+                    resultsDiv.classList.add('p-4', 'mt-4', 'bg-gray-100', 'rounded-xl', 'shadow-sm', 'text-gray-500', 'border', 'border-gray-300');
+                    resultsDiv.innerHTML = `<p class="italic">No member found matching "${searchInput.value}". Try initials or the full name!</p>`;
+                }
+            }
+        };
+
+        // Function to handle the 'I'm Feeling Lucky' action
+        const performLuckySearch = () => {
+            const searchInput = document.getElementById('searchInput');
+            const keys = Object.keys(memberData);
+            
+            // 1. Select a random key
+            const randomIndex = Math.floor(Math.random() * keys.length);
+            const randomKey = keys[randomIndex];
+            
+            // 2. Set the input value to the random member's name
+            searchInput.value = memberData[randomKey].name; 
+
+            // 3. Trigger the standard search to display results
+            performSearch();
+        };
+
+        // Function to open the modal and load content
+        const showModal = (section) => {
+            const content = modalContent[section];
+            if (!content) return;
+
+            document.getElementById('modalTitle').innerText = content.title;
+            document.getElementById('modalBody').innerHTML = content.body;
+            
+            const modal = document.getElementById('customModal');
+            const modalDialog = document.getElementById('modalDialog');
+            
+            // Apply enter animation classes
+            modalDialog.classList.remove('modal-enter');
+            modalDialog.classList.add('modal-enter-active');
+            
+            modal.classList.remove('hidden');
+        };
+
+        // Function to close the modal
+        const closeModal = () => {
+            const modal = document.getElementById('customModal');
+            const modalDialog = document.getElementById('modalDialog');
+            
+            // Apply exit animation (by removing the active class and adding hidden after transition)
+            modalDialog.classList.remove('modal-enter-active');
+            modalDialog.classList.add('modal-enter'); // Optional: can trigger a subtle fade out
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // Match transition duration
+        };
+
+
+        // --- Event Binding ---
+        window.onload = () => {
+            const searchInput = document.getElementById('searchInput');
+            const sklSearchButton = document.getElementById('sklSearchButton');
+            const luckyButton = document.getElementById('luckyButton'); 
+
+            // Search functionality bindings
+            searchInput.addEventListener('input', performSearch);
+            searchInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); 
+                    performSearch();
+                }
+            });
+            sklSearchButton.addEventListener('click', performSearch);
+            luckyButton.addEventListener('click', performLuckySearch);
+
+            // Modal functionality bindings
+            document.getElementById('aboutLink').addEventListener('click', (e) => { e.preventDefault(); showModal('About'); });
+            document.getElementById('privacyLink').addEventListener('click', (e) => { e.preventDefault(); showModal('Privacy'); });
+            document.getElementById('termsLink').addEventListener('click', (e) => { e.preventDefault(); showModal('Terms'); });
+            document.getElementById('settingsLink').addEventListener('click', (e) => { e.preventDefault(); showModal('Settings'); });
+
+            // Bind close button to closeModal
+            document.getElementById('modalCloseButton').addEventListener('click', closeModal);
+
+            // Close modal when clicking outside
+            document.getElementById('customModal').addEventListener('click', (e) => {
+                if (e.target.id === 'customModal') {
+                    closeModal();
+                }
+            });
+        };
+    </script>
+</head>
+<body class="bg-white font-sans flex flex-col min-h-screen">
+
+    <!-- Top Navigation and Buttons -->
+    <header class="flex justify-end p-4 space-x-4 text-sm">
+        <a href="https://enchantedfalconofbluetower.github.io/SklGPT-/" target="_blank" class="text-gray-700 hover:text-gray-900 px-3 py-1 rounded-full hover:bg-gray-100 transition duration-150">
+            SklGPT for PC
+        </a>
+        <a href="https://enchantedfalconofbluetower.github.io/sklGPT-mobile/" target="_blank" class="text-gray-700 hover:text-gray-900 px-3 py-1 rounded-full hover:bg-gray-100 transition duration-150">
+            SklGPT for Mobile
+        </a>
+        <a href="https://sites.google.com/view/sklcommunityguidelines/home" target="_blank" class="text-gray-700 hover:text-gray-900 px-3 py-1 rounded-full hover:bg-gray-100 transition duration-150">
+            Community Guidelines
+        </a>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        
+        <!-- Skl Logo -->
+        <div class="mb-5 flex flex-col items-center">
+            <!-- Logo source using the raw GitHub link -->
+            <img src="https://raw.githubusercontent.com/schoolkelog/skl/main/unnamed-removebg-preview.png" 
+                 alt="Skl Logo" 
+                 class="w-auto h-32 sm:h-40 object-contain" />
+
+            <!-- School Ke Log Rainbow Text -->
+            <div class="rainbow-text">
+                <span class="text-red-600">S</span>
+                <span class="text-orange-500">c</span>
+                <span class="text-red-600">h</span>
+                <span class="text-orange-500">o</span>
+                <span class="text-red-600">o</span>
+                <span class="text-orange-500 mr-2">l</span>
+
+                <span class="text-yellow-500">K</span>
+                <span class="text-green-600 mr-2">e</span>
+
+                <span class="text-blue-600">L</span>
+                <span class="text-purple-600">o</span>
+                <span class="text-blue-600">g</span>
+            </div>
+        </div>
+
+        <!-- Search Bar Container -->
+        <div class="w-full max-w-xl px-4">
+            <div class="google-like-input flex items-center border border-gray-300 rounded-full py-3 px-6 shadow-md hover:shadow-lg transition duration-300 bg-white">
+                <!-- Search Icon (Magnifying Glass) -->
+                <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                
+                <input type="text" 
+                       id="searchInput"
+                       placeholder="Search for a member" 
+                       class="flex-grow ml-3 text-lg focus:outline-none bg-transparent" />
+                
+                <!-- Placeholder Microphone Icon -->
+                <svg class="h-5 w-5 text-blue-500 cursor-pointer hover:text-blue-700 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7v0m-7-7a7 7 0 017-7m0 7v0a7 7 0 017-7m-7 7v-4m0 0v-4m0 4h4m-4 0H8m4-11c-2.76 0-5 2.24-5 5v3c0 2.76 2.24 5 5 5s5-2.24 5-5v-3c0-2.76-2.24-5-5-5z"></path></svg>
+            </div>
+
+            <!-- Search Results Display Area (Placed here to appear immediately under the search bar) -->
+            <div id="searchResults" class="w-full max-w-xl transition-all duration-300">
+                <!-- Results will be displayed here dynamically -->
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex space-x-4 mt-8">
+            <button id="sklSearchButton" class="bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 text-sm rounded-md transition duration-150 shadow-sm hover:shadow-md">
+                Skl Search
+            </button>
+            <button id="luckyButton" class="bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 text-sm rounded-md transition duration-150 shadow-sm hover:shadow-md">
+                I'm Feeling Lucky
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 text-gray-600 text-sm p-4 border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between">
+            <div class="mb-2 sm:mb-0">
+                &copy;School Ke Log
+            </div>
+            <div class="space-x-4">
+                <a href="#" id="aboutLink" class="hover:underline">About</a>
+                <a href="#" id="privacyLink" class="hover:underline">Privacy</a>
+                <a href="#" id="termsLink" class="hover:underline">Terms</a>
+                <a href="#" id="settingsLink" class="hover:underline">Settings</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Modal Structure -->
+    <div id="customModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onclick="closeModal()">
+        <div id="modalDialog" class="bg-white rounded-lg shadow-2xl w-full max-w-lg p-6 modal-enter" onclick="event.stopPropagation()">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center pb-3 border-b border-gray-200">
+                <h3 id="modalTitle" class="text-2xl font-bold text-blue-700">Modal Title</h3>
+                <button id="modalCloseButton" class="text-gray-400 hover:text-gray-600 focus:outline-none text-3xl leading-none">
+                    &times;
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div id="modalBody" class="py-4 text-gray-700">
+                <!-- Content goes here -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex justify-end pt-3 border-t border-gray-200">
+                <button onclick="closeModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 shadow-md">
+                    Got It
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
