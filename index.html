@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Changed the tab title here -->
     <title>School Ke Log</title> 
     <!-- Favicon link using the raw GitHub URL -->
     <link rel="icon" href="https://raw.githubusercontent.com/schoolkelog/skl/main/skl-removebg-preview.png">
@@ -11,20 +10,26 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles for a slight shadow and centering on the rainbow text */
+        /* Set the Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom styles for centering the rainbow text below the logo */
         .rainbow-text {
             font-size: 1.5rem;
             font-weight: 500;
-            margin-top: -1.5rem; /* Pull it closer to the main logo */
+            margin-top: -1.5rem; 
             margin-bottom: 2rem;
             display: flex;
             justify-content: center;
         }
 
+        /* Google-like input styling for hover and focus effects */
         .google-like-input {
             transition: box-shadow 0.3s, border-color 0.3s;
         }
-        .google-like-input:focus {
+        .google-like-input:focus-within {
             outline: none;
             box-shadow: 0 1px 6px rgba(32,33,36,.28);
             border-color: transparent;
@@ -35,7 +40,7 @@
             caret-color: #4285f4;
         }
         
-        /* Modal Animation */
+        /* Modal Animation for smooth appearance */
         .modal-enter {
             opacity: 0;
             transform: scale(0.9);
@@ -44,6 +49,16 @@
             opacity: 1;
             transform: scale(1);
             transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Utility class to simulate a 'pulse' effect on results once */
+        @keyframes pulse-once {
+            0% { transform: scale(0.98); opacity: 0.8; }
+            50% { transform: scale(1.00); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pulse-once {
+            animation: pulse-once 0.3s ease-out forwards;
         }
     </style>
     <script>
@@ -57,7 +72,7 @@
             }
         }
 
-        // --- Core Member Data with Added Flair ---
+        // --- Core Member Data (Includes Shaurya Sinha) ---
         const memberData = {
             "shreeman iyer": {
                 name: "Shreeman Iyer",
@@ -78,26 +93,30 @@
             "aarush bhardwaj": {
                 name: "Aarush Bhardwaj",
                 role: "The newest **New Member**, bringing fresh, dynamic energy and brilliant ideas to the team."
+            },
+            "shaurya sinha": {
+                name: "Shaurya Sinha",
+                role: "Newest member and **shareholder of SKL**, contributing to future strategic initiatives."
             }
         };
 
-        // --- Modal Content Data with Flair ---
+        // --- Modal Content Data (FORMAL/OFFICIAL LANGUAGE) ---
         const modalContent = {
             "About": {
-                title: "About Skl: The Legend",
-                body: "Skl is not just a group; it’s a digital mythos. Founded on the principles of audacity and excessive coding, we are the collective force behind legendary projects like SklGPT. We exist where the compiler meets chaos, driving innovation powered by sheer community spirit and too much caffeine. Welcome to the history of tomorrow."
+                title: "Official Statement: About School Ke Log (SKL)",
+                body: "School Ke Log (SKL) is a collective dedicated to digital innovation and collaborative development. Our mission is to foster a community environment for the creation of advanced projects, such as the highly-regarded SklGPT. SKL operates on principles of technical excellence, strategic partnership, and robust community governance, driving forward-thinking solutions in the digital space. This organization represents the history and future of our collective endeavors."
             },
             "Privacy": {
-                title: "Our Ultra-Secret Privacy Policy",
-                body: "We take your privacy incredibly seriously. So seriously, in fact, we don't track anything... except perhaps the cumulative awesome score of our members. Your data (name, role) is sacred and only used to determine who gets bragging rights this week. **Rule 1: No peeking.** (We might log search attempts just to check for high-tier fan club activity, but that's standard, right?)"
+                title: "SKL Official Privacy Policy",
+                body: "The privacy of our users and members is of paramount importance. This policy outlines our commitment to data protection. We ensure that personal information, including names and roles, is utilized solely for internal organizational purposes and to recognize contributions within the SKL community. **Strictly limited data collection is enforced.** Search inquiries may be logged for the sole purpose of analyzing user engagement and improving system performance, in accordance with standard operational procedures. Your trust is essential to our operations."
             },
             "Terms": {
-                title: "The Sacred Terms of Engagement",
-                body: "By continuing to use the Skl Search Portal, you agree to the following unnegotiable commandments:<ol class='list-decimal list-inside mt-4 space-y-2'><li>Thou shalt be cool.</li><li>Thou shalt not steal the secret snack stash.</li><li>Thou shalt respect the vibe (It's a coding vibe).</li><li>Thou shalt only use SklGPT for good (mostly).</li><li>Thou shalt acknowledge the Founding Fathers in all grand successes.</li></ol>Breach these terms and face a strongly-worded email."
+                title: "Terms and Conditions of Use",
+                body: "By accessing and utilizing the SKL Search Portal, you formally agree to comply with the following mandatory terms and conditions:<ol class='list-decimal list-inside mt-4 space-y-2'><li>Users must adhere to all community conduct guidelines.</li><li>Unauthorized access or misappropriation of proprietary assets is strictly prohibited.</li><li>All interactions must maintain a professional and constructive demeanor.</li><li>SklGPT and related resources must be utilized in a manner consistent with ethical computing standards.</li><li>Acknowledge and respect the intellectual property rights and contributions of all Founding Members and Co-owners.</li></ol>Non-compliance with these terms will result in a formal review and potential revocation of access privileges."
             },
             "Settings": {
-                title: "Your Perfect Settings (Do Not Touch)",
-                body: "Warning: All settings are optimally calibrated for maximum performance and minimum drama. The 'Awesomeness' level is currently set to 'Maximum.' Any attempts to change this may result in a paradox. **Status: You are currently running on the ideal configuration.**"
+                title: "System Configuration and Operational Status",
+                body: "This section confirms the current operational status and configuration of the SKL Search Portal. All system parameters are rigorously optimized for peak efficiency, security, and user experience. Any unauthorized modification of system settings is prohibited and may compromise performance. **Status: The system is currently operating under optimal, factory-default configuration.**"
             }
         };
 
@@ -159,7 +178,7 @@
             const modal = document.getElementById('customModal');
             const modalDialog = document.getElementById('modalDialog');
             
-            // Apply enter animation classes
+            // Start the transition by removing the initial state and adding the active state
             modalDialog.classList.remove('modal-enter');
             modalDialog.classList.add('modal-enter-active');
             
@@ -171,12 +190,15 @@
             const modal = document.getElementById('customModal');
             const modalDialog = document.getElementById('modalDialog');
             
-            // Apply exit animation (by removing the active class and adding hidden after transition)
+            // Apply exit transition state
             modalDialog.classList.remove('modal-enter-active');
-            modalDialog.classList.add('modal-enter'); // Optional: can trigger a subtle fade out
+            modalDialog.classList.add('modal-enter'); 
 
+            // Hide the modal after the transition completes
             setTimeout(() => {
                 modal.classList.add('hidden');
+                // Re-add the enter class so it's ready for the next time it's opened
+                modalDialog.classList.remove('modal-enter');
             }, 300); // Match transition duration
         };
 
@@ -207,7 +229,7 @@
             // Bind close button to closeModal
             document.getElementById('modalCloseButton').addEventListener('click', closeModal);
 
-            // Close modal when clicking outside
+            // Close modal when clicking outside (using event delegation on the modal overlay)
             document.getElementById('customModal').addEventListener('click', (e) => {
                 if (e.target.id === 'customModal') {
                     closeModal();
@@ -266,11 +288,11 @@
                 <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 
                 <input type="text" 
-                       id="searchInput"
-                       placeholder="Search for a member" 
-                       class="flex-grow ml-3 text-lg focus:outline-none bg-transparent" />
+                        id="searchInput"
+                        placeholder="Search for a member" 
+                        class="flex-grow ml-3 text-lg focus:outline-none bg-transparent" />
                 
-                <!-- Placeholder Microphone Icon -->
+                <!-- Placeholder Microphone Icon (for aesthetic purposes) -->
                 <svg class="h-5 w-5 text-blue-500 cursor-pointer hover:text-blue-700 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7v0m-7-7a7 7 0 017-7m0 7v0a7 7 0 017-7m-7 7v-4m0 0v-4m0 4h4m-4 0H8m4-11c-2.76 0-5 2.24-5 5v3c0 2.76 2.24 5 5 5s5-2.24 5-5v-3c0-2.76-2.24-5-5-5z"></path></svg>
             </div>
 
@@ -308,8 +330,8 @@
     </footer>
 
     <!-- Custom Modal Structure -->
-    <div id="customModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onclick="closeModal()">
-        <div id="modalDialog" class="bg-white rounded-lg shadow-2xl w-full max-w-lg p-6 modal-enter" onclick="event.stopPropagation()">
+    <div id="customModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div id="modalDialog" class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 modal-enter" onclick="event.stopPropagation()">
             <!-- Modal Header -->
             <div class="flex justify-between items-center pb-3 border-b border-gray-200">
                 <h3 id="modalTitle" class="text-2xl font-bold text-blue-700">Modal Title</h3>
@@ -319,14 +341,14 @@
             </div>
             
             <!-- Modal Body -->
-            <div id="modalBody" class="py-4 text-gray-700">
+            <div id="modalBody" class="py-4 text-gray-700 overflow-y-auto max-h-96">
                 <!-- Content goes here -->
             </div>
 
             <!-- Modal Footer -->
             <div class="flex justify-end pt-3 border-t border-gray-200">
                 <button onclick="closeModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-150 shadow-md">
-                    Got It
+                    Close
                 </button>
             </div>
         </div>
